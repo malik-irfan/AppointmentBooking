@@ -1,0 +1,10 @@
+server:
+  port: 7171
+spring:
+  devtools:
+    add-properties: false
+
+security:
+  jwt:
+    secret-key: verysecretkeyohmygodwhyisitsosecretdonttellanybody
+    jwt-expiry: 120

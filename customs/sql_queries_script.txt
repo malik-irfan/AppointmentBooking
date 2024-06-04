@@ -1,0 +1,40 @@
+/* Fetch all services */
+ Select * FROM [TestDemo].[dbo].[Service]
+
+ 
+ /* Fetch all employee */
+ SELECT *  FROM [TestDemo].[dbo].[Employee] (NOLOCK)
+ 
+ /* Fetch all clients */
+ SELECT * FROM [TestDemo].[dbo].[Client] (NOLOCK)
+ 
+ /* Get Schedules of employee */
+ SELECT Emp.first_name, Sdl.startTime, Sdl.endTime
+ FROM [TestDemo].[dbo].Schedule  AS Sdl (NOLOCK)
+ LEFT JOIN [TestDemo].[dbo].Employee AS Emp (NOLOCK) ON Emp.id = Sdl.employee_id 
+ WHERE Sdl.startTime >= '2024-01-19 00:00:00' and Sdl.startTime <= '2024-01-19 23:59:59'
+
+
+
+ DECLARE @desired_time datetime
+ SET @desired_time = '2024-01-20 13:00:00'
+ /*simply return every employee who will be present during a given time slot  */
+ SELECT Employee.first_name, Employee.last_name, Schedule.startTime, Schedule.endTime
+FROM Schedule, Employee
+WHERE Schedule.employee_id = Employee.id
+AND Schedule.startTime <= @desired_time
+AND Schedule.endTime >= @desired_time;
+
+
+
+
+
+DECLARE @desired_employee int
+SET @desired_employee = 2
+/*If a client specifically asks for a stylist,   if that employee already has other appointments set for the desired time */
+SELECT COUNT(*) AS appointment_no
+FROM Appointment, Employee
+WHERE Appointment.employee_id = Employee.id
+AND Appointment.start_time >= @desired_time
+AND Appointment.end_time_expected <= @desired_time
+AND Appointment.employee_id = @desired_employee;
